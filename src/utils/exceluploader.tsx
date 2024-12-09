@@ -58,7 +58,7 @@ export default function ExcelUploader() {
         .filter((record: any) => record !== undefined);
       console.log(records);
       try {
-        await addMultipleDocuments("test", records);
+        await addMultipleDocuments("islands", records);
       } catch (e: any) {
         console.error("erro adding excel records to firebase", e);
       }
