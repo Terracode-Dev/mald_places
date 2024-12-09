@@ -1,7 +1,7 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -9,10 +9,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Service } from "@/pages/islandDetails"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Service } from "@/pages/islandDetails";
 // import { Service } from "@/pages/islandDetails"
 
 const formSchema = z.object({
@@ -23,15 +23,16 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   website: z.string().url("Invalid URL"),
   phoneNumber: z.string().min(1, "Phone number is required"),
-  island_no: z.string().min(1, "Island number is required"),
-  category: z.string().min(1, "Category is required")
-})
+  island_no: z.number().int().min(1, "Island number is required"),
+  category: z.string().min(1, "service Category is required"),
+});
 
 interface AddServiceFormProps {
-  onSubmit: (data: Service) => void
+  onSubmit: (data: Service) => void;
+  islandNo: string | number;
 }
 
-export function AddServiceForm({ onSubmit }: AddServiceFormProps) {
+export function AddServiceForm({ onSubmit, islandNo }: AddServiceFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,9 +44,9 @@ export function AddServiceForm({ onSubmit }: AddServiceFormProps) {
       website: "",
       phoneNumber: "",
       island_no: "1",
-      category: ""
+      category: "",
     },
-  })
+  });
 
   return (
     <Form {...form}>
@@ -135,7 +136,11 @@ export function AddServiceForm({ onSubmit }: AddServiceFormProps) {
             <FormItem>
               <FormLabel>Island Number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter island number" {...field} />
+                <Input
+                  placeholder="island number"
+                  {...field}
+                  defaultValue={islandNo}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -157,7 +162,7 @@ export function AddServiceForm({ onSubmit }: AddServiceFormProps) {
         <Button type="submit">Add Service</Button>
       </form>
     </Form>
-  )
+  );
 }
 
 // import { useForm } from "react-hook-form"

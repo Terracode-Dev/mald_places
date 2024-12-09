@@ -5,8 +5,6 @@ import { IslandTable } from "@/components/default/IslandTable";
 import { Island } from "@/schema/island";
 import { getAllDocuments, addSingleDocument } from "../../firebase"; // Adjust the path based on your project structure
 
-
-
 export function IslandManagement() {
   const [islands, setIslands] = useState<Island[]>([]);
   const [filteredIslands, setFilteredIslands] = useState<Island[]>([]);
@@ -18,7 +16,7 @@ export function IslandManagement() {
       try {
         setLoading(true);
         const fetchedIslands = await getAllDocuments<Island[]>("test"); // Replace "all" with your document ID or logic
-        console.log(fetchedIslands)
+        console.log(fetchedIslands);
         if (fetchedIslands) {
           setIslands(fetchedIslands.flat());
           setFilteredIslands(fetchedIslands.flat());
@@ -35,11 +33,12 @@ export function IslandManagement() {
   }, []);
 
   const handleSearch = (query: string) => {
-
-    const filtered = islands.filter(island => {
+    const filtered = islands.filter((island) => {
       return (
         (island.Name?.toLowerCase() || "").includes(query.toLowerCase()) ||
-        (island.IslandType?.toLowerCase() || "").includes(query.toLowerCase()) ||
+        (island.IslandType?.toLowerCase() || "").includes(
+          query.toLowerCase(),
+        ) ||
         (island.Atoll?.toLowerCase() || "").includes(query.toLowerCase())
       );
     });
@@ -49,11 +48,11 @@ export function IslandManagement() {
 
   const handleAddIsland = async (newIsland: Island) => {
     try {
-      const newDocId = await addSingleDocument("test", newIsland);
+      const newDocId = await addSingleDocument("islands", newIsland);
       const addedIsland = { ...newIsland, id: newDocId };
 
-      setIslands(prevIslands => [...prevIslands, addedIsland]);
-      setFilteredIslands(prevFiltered => [...prevFiltered, addedIsland]);
+      setIslands((prevIslands) => [...prevIslands, addedIsland]);
+      setFilteredIslands((prevFiltered) => [...prevFiltered, addedIsland]);
     } catch (error) {
       console.error("Error adding island:", error);
       // Optionally handle error
@@ -75,8 +74,9 @@ export function IslandManagement() {
         <SearchBar onSearch={handleSearch} />
         <AddIslandButton onIslandAdded={handleAddIsland} />
       </div>
-      <IslandTable islands={filteredIslands.length > 0 ? filteredIslands : islands} />
+      <IslandTable
+        islands={filteredIslands.length > 0 ? filteredIslands : islands}
+      />
     </div>
   );
 }
-

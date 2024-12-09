@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -8,11 +8,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Island } from "@/schema/island"
+} from "@/components/ui/table";
+import { Island } from "@/schema/island";
 
 interface IslandTableProps {
-  islands: Island[]
+  islands: Island[];
 }
 
 export function IslandTable({ islands }: IslandTableProps) {
@@ -38,33 +38,50 @@ export function IslandTable({ islands }: IslandTableProps) {
   };
 
   return (
-    <Table className="border rounded " >
+    <Table className="border rounded ">
       <TableHeader>
-        <TableRow >
-          <TableHead className="w-[50px]" onClick={() => handleSort("No")} >No</TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("Name")}>
+        <TableRow>
+          <TableHead className="w-[50px]" onClick={() => handleSort("No")}>
+            No
+          </TableHead>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("Name")}
+          >
             Name
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("Latitude")}>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("Latitude")}
+          >
             Latitude
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("Longitude")}>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("Longitude")}
+          >
             Longitude
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("IslandType")}>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("IslandType")}
+          >
             Island Type
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("Atoll")}>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("Atoll")}
+          >
             Atoll
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {sortedIslands.map((island,) => (
+        {sortedIslands.map((island) => (
           <TableRow
             key={island.No}
             className="cursor-pointer hover:bg-muted/50"
-            onClick={() => navigateTo(`/island/${island.Name}`)}
+            onClick={() => navigateTo(`/island/${island.Name}_${island.No}`)}
           >
             <TableCell>{island.No}</TableCell>
             <TableCell>{island.Name}</TableCell>
@@ -78,9 +95,6 @@ export function IslandTable({ islands }: IslandTableProps) {
     </Table>
   );
 }
-
-
-
 
 // export function IslandTable({ islands }: IslandTableProps) {
 //   // const navigate = useNavigate()

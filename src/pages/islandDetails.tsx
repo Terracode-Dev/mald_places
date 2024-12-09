@@ -1,22 +1,28 @@
-import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ServiceCategoryCard } from "@/components/default/ServiceCategoryCard"
-import { AddCategoryForm } from "@/components/default/AddCategoryForm"
-import { AddServiceForm } from "@/components/default/AddServiceForm"
-import { addSingleDocument, getDocumentsByCriteria } from "../../firebase"
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ServiceCategoryCard } from "@/components/default/ServiceCategoryCard";
+//import { AddCategoryForm } from "@/components/default/AddCategoryForm";
+import { AddServiceForm } from "@/components/default/AddServiceForm";
+import { addSingleDocument, getDocumentsByCriteria } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 export interface ServiceCategory {
-  address: string
-  company: string
-  email: string
-  id: string
-  island_no: string
-  keyword: string
-  service: string
+  address: string;
+  company: string;
+  email: string;
+  id: string;
+  island_no: string;
+  keyword: string;
+  service: string;
 }
 
 export const mockServiceCategories: ServiceCategory[] = [
@@ -68,15 +74,15 @@ export const mockServiceCategories: ServiceCategory[] = [
 ];
 
 export interface Service {
-  id: string
-  Name: string
-  address: string
-  description: string
-  email: string
-  website: string
-  phoneNumber: string
-  island_no: string
-  category: string
+  id: string;
+  Name: string;
+  address: string;
+  description: string;
+  email: string;
+  website: string;
+  phoneNumber: string;
+  island_no: string;
+  category: string;
 }
 
 // const getServiceCategories = async (id: string) => {
@@ -85,45 +91,54 @@ export interface Service {
 // }
 
 export function IslandDetails() {
-  const { islandName } = useParams<{ islandName: string }>()
-  const [categories, setCategories] = useState<ServiceCategory[]>([])
-  const [filteredCategories, setFilteredCategories] = useState<ServiceCategory[]>([])
-  const [searchQuery, setSearchQuery] = useState("")
-  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false)
-  const [isAddServiceOpen, setIsAddServiceOpen] = useState(false)
+  const { islandName } = useParams<{ islandName: string }>();
+  const [isname, isno] = islandName.split("_");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [categories, setCategories] = useState<ServiceCategory[]>([]);
+  const [categoriesLBL, setCategoriesLBL] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+  const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
-      if (islandName) {
-        setCategories(mockServiceCategories)
+      if (isname) {
+        let lbl = await getDocumentsByCriteria("island_services", {
+          island_no: parseInt(isno, 10),
+        });
+        const unqctgs = [...new Set(lbl.map((ctg) => ctg.service))];
+        console.log("islands", lbl);
+        setCategories(lbl);
+        setCategoriesLBL(unqctgs);
+        setLoading(false);
       }
-    }
-    fetchCategories()
-  }, [islandName])
+    };
+    fetchCategories();
+  }, [islandName]);
 
-  useEffect(() => {
-    const filtered = categories.filter(category =>
-      category.service.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    setFilteredCategories(filtered)
-  }, [categories, searchQuery])
+  // useEffect(() => {
+  //   const filtered = categories.filter((category) =>
+  //     category.service.toLowerCase().includes(searchQuery.toLowerCase()),
+  //   );
+  //   setFilteredCategories(filtered);
+  // }, [categories, searchQuery]);
 
-  const handleAddCategory = (data: ServiceCategory) => {
-    addSingleDocument("island_services", data)
-    setCategories(prev => [...prev, data])
-    setIsAddCategoryOpen(false)
-  }
+  // const handleAddCategory = (data: ServiceCategory) => {
+  //   addSingleDocument("island_services", data);
+  //   setCategories((prev) => [...prev, data]);
+  //   setIsAddCategoryOpen(false);
+  // };
 
   const handleAddService = (data: Service) => {
-    addSingleDocument("services", data)
-    setIsAddServiceOpen(false)
+    addSingleDocument("island_services", data);
+    setIsAddServiceOpen(false);
     // Optionally, you can refresh the services list here
-  }
+  };
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">{islandName} Serveice: </h1>
+      <h1 className="text-2xl font-bold mb-6">{isname} Island Services: </h1>
       <div className="flex justify-between items-center mb-6">
         <Input
           placeholder="Search categories..."
@@ -132,7 +147,7 @@ export function IslandDetails() {
           className="max-w-sm"
         />
         <div className="space-x-2">
-          <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
+          {/* <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
             <DialogTrigger asChild>
               <Button>Add Category</Button>
             </DialogTrigger>
@@ -142,31 +157,37 @@ export function IslandDetails() {
               </DialogHeader>
               <AddCategoryForm onSubmit={handleAddCategory} />
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
           <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
             <DialogTrigger asChild>
               <Button>Add Service</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[570px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Add New Service</DialogTitle>
+                <DialogTitle>{`Add New Service in ${isname}`} </DialogTitle>
               </DialogHeader>
-              <AddServiceForm onSubmit={handleAddService} />
+              <AddServiceForm onSubmit={handleAddService} islandNo={isno} />
             </DialogContent>
           </Dialog>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filteredCategories.map((category, idx) => (
-          <ServiceCategoryCard
-            key={idx}
-            category={category}
-            onClick={() => navigate(`/island/${islandName}/${category.id}`)}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="text-center py-10">Loading Services...</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {categoriesLBL.map((category, idx) => (
+            <ServiceCategoryCard
+              key={idx}
+              category={category}
+              onClick={() =>
+                navigate(`/island/${isname}/${categories[idx].id}`)
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
 // import { useState, useEffect } from "react"
