@@ -1,8 +1,6 @@
-// First, install SheetJS via npm:
-// npm install xlsx
 import { useState } from "react";
 import * as XLSX from "xlsx";
-
+import { addMultipleDocuments } from "../../firebase";
 function parseExcelFile(file: File) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -42,9 +40,28 @@ export default function ExcelUploader() {
     const file = event.target.files[0];
 
     try {
-      const data = await parseExcelFile(file);
+      const data: any = await parseExcelFile(file);
       setExcelData(data);
-      console.log(data); // Array of objects
+      const columns = Object.values(data[0]);
+      const records = data
+        .map((dt: any, i: number) => {
+          if (i !== 0) {
+            const Doc = {};
+            const rowValues = Object.values(dt);
+            for (let col = 0; col < rowValues.length; col++) {
+              Doc[columns[col]] = rowValues[col];
+            }
+            return Doc;
+          }
+        })
+        .filter((record: any) => record !== undefined);
+      console.log(records);
+      try {
+        await addMultipleDocuments("test", records);
+      } catch (e: any) {
+        console.error("erro adding excel records to firebase", e);
+      }
+      // Array of objects
     } catch (error) {
       console.error("Error parsing Excel file:", error);
     }

@@ -35,6 +35,18 @@ const db = getFirestore(app);
 //const analytics = getAnalytics(app);
 
 //API codes
+//AUTH
+export const CheckAuth = async (
+  usrnm: string,
+  passwd: string,
+): Promise<boolean> => {
+  const USER: DocumentData[] = await getDocumentsByCriteria("users", {
+    username: usrnm,
+    passwd: passwd,
+  });
+  return USER.length == 0 ? false : true;
+};
+
 //GET
 export const getDocumentById = async <T = DocumentData>(
   collectionName: string,
@@ -90,6 +102,7 @@ export const getDocumentsByCriteria = async <T = DocumentData>(
 //   status: 'active',
 //   age: 30
 // });
+//
 
 //POST
 export const addSingleDocument = async (
