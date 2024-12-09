@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <IslandManagement />,
   },
   {
-    path: "/island/:islandName",
+    path: "/islandin/:islandName/:islandNo",
     element: <IslandDetails />,
   },
   {

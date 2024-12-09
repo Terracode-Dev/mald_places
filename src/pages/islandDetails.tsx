@@ -25,64 +25,64 @@ export interface ServiceCategory {
   service: string;
 }
 
-export const mockServiceCategories: ServiceCategory[] = [
-  {
-    address: "123 Palm Street, Atoll City",
-    company: "Island Logistics",
-    email: "contact@islandlogistics.com",
-    id: "1",
-    island_no: "1001",
-    keyword: "delivery",
-    service: "Logistics and Delivery",
-  },
-  {
-    address: "456 Coral Lane, Ocean Town",
-    company: "Seaside Resorts",
-    email: "info@seasideresorts.com",
-    id: "2",
-    island_no: "1002",
-    keyword: "hospitality",
-    service: "Resort Management",
-  },
-  {
-    address: "789 Lagoon Drive, Reef City",
-    company: "Marine Adventures",
-    email: "support@marineadventures.com",
-    id: "3",
-    island_no: "1003",
-    keyword: "tourism",
-    service: "Snorkeling and Diving",
-  },
-  {
-    address: "321 Harbor Avenue, Port Island",
-    company: "Island Grocers",
-    email: "hello@islandgrocers.com",
-    id: "4",
-    island_no: "1004",
-    keyword: "retail",
-    service: "Grocery Supplies",
-  },
-  {
-    address: "654 Cove Road, Sunset Bay",
-    company: "Tropical Health",
-    email: "care@tropicalhealth.com",
-    id: "5",
-    island_no: "1005",
-    keyword: "healthcare",
-    service: "Healthcare Services",
-  },
-];
+// export const mockServiceCategories: ServiceCategory[] = [
+//   {
+//     address: "123 Palm Street, Atoll City",
+//     company: "Island Logistics",
+//     email: "contact@islandlogistics.com",
+//     id: "1",
+//     island_no: "1001",
+//     keyword: "delivery",
+//     service: "Logistics and Delivery",
+//   },
+//   {
+//     address: "456 Coral Lane, Ocean Town",
+//     company: "Seaside Resorts",
+//     email: "info@seasideresorts.com",
+//     id: "2",
+//     island_no: "1002",
+//     keyword: "hospitality",
+//     service: "Resort Management",
+//   },
+//   {
+//     address: "789 Lagoon Drive, Reef City",
+//     company: "Marine Adventures",
+//     email: "support@marineadventures.com",
+//     id: "3",
+//     island_no: "1003",
+//     keyword: "tourism",
+//     service: "Snorkeling and Diving",
+//   },
+//   {
+//     address: "321 Harbor Avenue, Port Island",
+//     company: "Island Grocers",
+//     email: "hello@islandgrocers.com",
+//     id: "4",
+//     island_no: "1004",
+//     keyword: "retail",
+//     service: "Grocery Supplies",
+//   },
+//   {
+//     address: "654 Cove Road, Sunset Bay",
+//     company: "Tropical Health",
+//     email: "care@tropicalhealth.com",
+//     id: "5",
+//     island_no: "1005",
+//     keyword: "healthcare",
+//     service: "Healthcare Services",
+//   },
+// ];
 
 export interface Service {
   id: string;
-  Name: string;
+  company: string;
   address: string;
   description: string;
   email: string;
-  website: string;
+  web: string;
   phoneNumber: string;
   island_no: string;
-  category: string;
+  service: string;
 }
 
 // const getServiceCategories = async (id: string) => {
@@ -91,23 +91,26 @@ export interface Service {
 // }
 
 export function IslandDetails() {
-  const { islandName } = useParams<{ islandName: string }>();
-  const [isname, isno] = islandName.split("_");
+  const { islandName, islandNo } = useParams<{
+    islandName: string;
+    islandNo: string;
+  }>();
+  //const [isname, isno] = islandName.split("_");
   const [loading, setLoading] = useState<boolean>(true);
   const [serviceReloadTrigger, setServiceReloadTrigger] = useState(0);
   const [loader, setLoader] = useState<boolean>(false);
-  const [categories, setCategories] = useState<ServiceCategory[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [categoriesLBL, setCategoriesLBL] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   //const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   const navigate = useNavigate();
-
+  console.log(categories);
   useEffect(() => {
     const fetchCategories = async () => {
-      if (isname) {
+      if (islandName) {
         let lbl = await getDocumentsByCriteria("island_services", {
-          island_no: isno,
+          island_no: islandNo,
         });
         const unqctgs = [...new Set(lbl.map((ctg) => ctg.service))];
         console.log("islands", lbl);
@@ -143,7 +146,9 @@ export function IslandDetails() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">{isname} Island Services: </h1>
+      <h1 className="text-2xl font-bold mb-6">
+        {islandName} Island Services:{" "}
+      </h1>
       <div className="flex justify-between items-center mb-6">
         <Input
           placeholder="Search categories..."
@@ -169,11 +174,11 @@ export function IslandDetails() {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[570px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>{`Add New Service in ${isname}`} </DialogTitle>
+                <DialogTitle>{`Add New Service in ${islandName}`} </DialogTitle>
               </DialogHeader>
               <AddServiceForm
                 onSubmit={handleAddService}
-                islandNo={isno}
+                islandNo={islandNo}
                 loader={loader}
               />
             </DialogContent>
@@ -189,7 +194,7 @@ export function IslandDetails() {
               key={idx}
               category={category}
               onClick={() =>
-                navigate(`/island/${isno}/${category.replace(/\s+/g, "_")}`)
+                navigate(`/island/${islandNo}/${category.replace(/\s+/g, "_")}`)
               }
             />
           ))}

@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 interface AddServiceFormProps {
   onSubmit: (data: Service) => void;
-  islandNo: string | number;
+  islandNo: string | number | undefined;
   loader: boolean;
 }
 

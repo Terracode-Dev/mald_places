@@ -1,9 +1,9 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { ServiceCategory } from "@/pages/islandDetails";
+
 import { Building } from "lucide-react";
 
 interface ServiceCategoryCardProps {
-  category: ServiceCategory;
+  category: string;
   onClick: () => void;
 }
 

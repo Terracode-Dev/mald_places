@@ -81,7 +81,7 @@ export function IslandTable({ islands }: IslandTableProps) {
           <TableRow
             key={island.No}
             className="cursor-pointer hover:bg-muted/50"
-            onClick={() => navigateTo(`/island/${island.Name}_${island.No}`)}
+            onClick={() => navigateTo(`/islandin/${island.Name}/${island.No}`)}
           >
             <TableCell>{island.No}</TableCell>
             <TableCell>{island.Name}</TableCell>

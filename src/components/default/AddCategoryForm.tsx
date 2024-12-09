@@ -1,7 +1,7 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -9,24 +9,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { type LucideIcon, icons } from 'lucide-react'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+import { type LucideIcon, icons } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, "Category name is required"),
   icon: z.string().min(1, "Icon is required"),
-})
+});
 
 interface AddCategoryFormProps {
-  onSubmit: (data: { name: string; icon: LucideIcon }) => void
+  onSubmit: (data: { name: string; icon: LucideIcon }) => void;
 }
 
 export function AddCategoryForm({ onSubmit }: AddCategoryFormProps) {
@@ -36,11 +30,14 @@ export function AddCategoryForm({ onSubmit }: AddCategoryFormProps) {
       name: "",
       icon: "",
     },
-  })
+  });
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    onSubmit({ name: values.name, icon: icons[values.icon as keyof typeof icons] })
-  }
+    onSubmit({
+      name: values.name,
+      icon: icons[values.icon as keyof typeof icons],
+    });
+  };
 
   return (
     <Form {...form}>
@@ -85,6 +82,5 @@ export function AddCategoryForm({ onSubmit }: AddCategoryFormProps) {
         <Button type="submit">Add Category</Button>
       </form>
     </Form>
-  )
+  );
 }
-

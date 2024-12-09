@@ -1,12 +1,8 @@
-import React, { useState } from 'react'
-import { Menu, X, User } from 'lucide-react'
+import { useState } from "react";
+import { Menu, X, User } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 
 const routes = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/services', label: 'Services' },
-  { href: '/contact', label: 'Contact' },
-]
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/services", label: "Services" },
+  { href: "/contact", label: "Contact" },
+];
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav className="bg-white shadow">
@@ -51,7 +47,10 @@ export function Navbar() {
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -67,7 +66,10 @@ export function Navbar() {
           <div className="flex items-center sm:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <Button
+                  variant="ghost"
+                  className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                >
                   {isOpen ? (
                     <X className="block h-6 w-6" aria-hidden="true" />
                   ) : (
@@ -98,6 +100,5 @@ export function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
-
