@@ -1,11 +1,10 @@
-import { Button } from '@/components/ui/button'
+import LoginPage from './pages/login'
 
 function App() {
 
   return (
     <div>
-      <h1 className='text-red-800' >Login</h1>
-      <Button>btn</Button>
+      <LoginPage />
     </div>
   )
 }
