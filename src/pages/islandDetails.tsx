@@ -94,10 +94,12 @@ export function IslandDetails() {
   const { islandName } = useParams<{ islandName: string }>();
   const [isname, isno] = islandName.split("_");
   const [loading, setLoading] = useState<boolean>(true);
+  const [serviceReloadTrigger, setServiceReloadTrigger] = useState(0);
+  const [loader, setLoader] = useState<boolean>(false);
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [categoriesLBL, setCategoriesLBL] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+  //const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -105,7 +107,7 @@ export function IslandDetails() {
     const fetchCategories = async () => {
       if (isname) {
         let lbl = await getDocumentsByCriteria("island_services", {
-          island_no: parseInt(isno, 10),
+          island_no: isno,
         });
         const unqctgs = [...new Set(lbl.map((ctg) => ctg.service))];
         console.log("islands", lbl);
@@ -115,7 +117,7 @@ export function IslandDetails() {
       }
     };
     fetchCategories();
-  }, [islandName]);
+  }, [islandName, serviceReloadTrigger]);
 
   // useEffect(() => {
   //   const filtered = categories.filter((category) =>
@@ -130,9 +132,12 @@ export function IslandDetails() {
   //   setIsAddCategoryOpen(false);
   // };
 
-  const handleAddService = (data: Service) => {
-    addSingleDocument("island_services", data);
+  const handleAddService = async (data: Service) => {
+    setLoader(true);
+    await addSingleDocument("island_services", data);
     setIsAddServiceOpen(false);
+    setLoader(false);
+    setServiceReloadTrigger((prev) => prev + 1);
     // Optionally, you can refresh the services list here
   };
 
@@ -166,7 +171,11 @@ export function IslandDetails() {
               <DialogHeader>
                 <DialogTitle>{`Add New Service in ${isname}`} </DialogTitle>
               </DialogHeader>
-              <AddServiceForm onSubmit={handleAddService} islandNo={isno} />
+              <AddServiceForm
+                onSubmit={handleAddService}
+                islandNo={isno}
+                loader={loader}
+              />
             </DialogContent>
           </Dialog>
         </div>
@@ -180,7 +189,7 @@ export function IslandDetails() {
               key={idx}
               category={category}
               onClick={() =>
-                navigate(`/island/${isname}/${categories[idx].id}`)
+                navigate(`/island/${isno}/${category.replace(/\s+/g, "_")}`)
               }
             />
           ))}

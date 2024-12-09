@@ -3,23 +3,27 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Service } from "@/pages/islandDetails"
+} from "@/components/ui/dialog";
+import { Service } from "@/pages/islandDetails";
 
 interface ServiceDetailsDialogProps {
-  service: Service | null
-  isOpen: boolean
-  onClose: () => void
+  service: Service | null;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export function ServiceDetailsDialog({ service, isOpen, onClose }: ServiceDetailsDialogProps) {
-  if (!service) return null
+export function ServiceDetailsDialog({
+  service,
+  isOpen,
+  onClose,
+}: ServiceDetailsDialogProps) {
+  if (!service) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{service.Name}</DialogTitle>
+          <DialogTitle>{service.company}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div>
@@ -34,11 +38,20 @@ export function ServiceDetailsDialog({ service, isOpen, onClose }: ServiceDetail
             <h3 className="font-medium">Contact Information</h3>
             <p>Email: {service.email}</p>
             <p>Phone: {service.phoneNumber}</p>
-            <p>Website: <a href={service.website} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{service.website}</a></p>
+            <p>
+              Website:{" "}
+              <a
+                href={service.web}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                {service.web}
+              </a>
+            </p>
           </div>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

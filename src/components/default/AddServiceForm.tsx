@@ -17,34 +17,39 @@ import { Service } from "@/pages/islandDetails";
 
 const formSchema = z.object({
   id: z.string(),
-  Name: z.string().min(1, "Service name is required"),
+  company: z.string().min(1, "Service name is required"),
   description: z.string().min(1, "Description is required"),
   address: z.string().min(1, "Address is required"),
   email: z.string().email("Invalid email address"),
-  website: z.string().url("Invalid URL"),
+  web: z.string().url("Invalid URL"),
   phoneNumber: z.string().min(1, "Phone number is required"),
-  island_no: z.number().int().min(1, "Island number is required"),
-  category: z.string().min(1, "service Category is required"),
+  island_no: z.string().min(1, "Island number is required"),
+  service: z.string().min(1, "service Category is required"),
 });
 
 interface AddServiceFormProps {
   onSubmit: (data: Service) => void;
   islandNo: string | number;
+  loader: boolean;
 }
 
-export function AddServiceForm({ onSubmit, islandNo }: AddServiceFormProps) {
+export function AddServiceForm({
+  onSubmit,
+  islandNo,
+  loader,
+}: AddServiceFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       id: "",
-      Name: "",
+      company: "",
       description: "",
       address: "",
       email: "",
-      website: "",
+      web: "",
       phoneNumber: "",
       island_no: "1",
-      category: "",
+      service: "",
     },
   });
 
@@ -53,12 +58,12 @@ export function AddServiceForm({ onSubmit, islandNo }: AddServiceFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="Name"
+          name="company"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Service Name</FormLabel>
+              <FormLabel>Company Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter service name" {...field} />
+                <Input placeholder="Enter company" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -105,7 +110,7 @@ export function AddServiceForm({ onSubmit, islandNo }: AddServiceFormProps) {
         />
         <FormField
           control={form.control}
-          name="website"
+          name="web"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Website</FormLabel>
@@ -148,18 +153,23 @@ export function AddServiceForm({ onSubmit, islandNo }: AddServiceFormProps) {
         />
         <FormField
           control={form.control}
-          name="category"
+          name="service"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>Service Category</FormLabel>
               <FormControl>
-                <Input placeholder="Enter service category" {...field} />
+                <Input
+                  placeholder="Enter service category eg: Fitness Centre,Resort"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Add Service</Button>
+        <Button type="submit">
+          {loader ? "Adding Service" : "Add Service"}
+        </Button>
       </form>
     </Form>
   );

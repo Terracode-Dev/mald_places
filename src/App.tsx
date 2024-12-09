@@ -15,13 +15,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/island/:islandName",
-    element: <IslandDetails />
+    element: <IslandDetails />,
   },
   {
-    path: "/island/:islandName/:serviceId",
-    element: <IslandServices />
-  }
-
+    path: "/island/:islandNo/:ctg",
+    element: <IslandServices />,
+  },
 ]);
 
 function App() {
