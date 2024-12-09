@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+import { useNavigate } from "react-router-dom"
 import {
   Table,
   TableBody,
@@ -17,6 +18,7 @@ interface IslandTableProps {
 export function IslandTable({ islands }: IslandTableProps) {
   const [sortColumn, setSortColumn] = useState<keyof Island>("No");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const navigateTo = useNavigate();
 
   const sortedIslands = [...islands].sort((a, b) => {
     const valueA = a[sortColumn] ?? "";
@@ -62,7 +64,7 @@ export function IslandTable({ islands }: IslandTableProps) {
           <TableRow
             key={island.No}
             className="cursor-pointer hover:bg-muted/50"
-            onClick={() => console.log(island.Name)}
+            onClick={() => navigateTo(`/island/${island.Name}`)}
           >
             <TableCell>{island.No}</TableCell>
             <TableCell>{island.Name}</TableCell>

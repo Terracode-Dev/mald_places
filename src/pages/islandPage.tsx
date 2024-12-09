@@ -3,7 +3,7 @@ import { SearchBar } from "@/components/default/SearchBar";
 import { AddIslandButton } from "@/components/default/AddIslandBtn";
 import { IslandTable } from "@/components/default/IslandTable";
 import { Island } from "@/schema/island";
-import { getAllDocuments } from "../../firebase"; // Adjust the path based on your project structure
+import { getAllDocuments, addSingleDocument } from "../../firebase"; // Adjust the path based on your project structure
 
 
 
@@ -34,15 +34,6 @@ export function IslandManagement() {
     fetchIslands();
   }, []);
 
-  // const handleSearch = (query: string) => {
-  //   const filtered = islands.filter(island =>
-  //     island.Name.toLowerCase().includes(query.toLowerCase()) ||
-  //     island.IslandType.toLowerCase().includes(query.toLowerCase()) ||
-  //     (island.Atoll && island.Atoll.toLowerCase().includes(query.toLowerCase()))
-  //   );
-  //   setFilteredIslands(filtered);
-  // };
-
   const handleSearch = (query: string) => {
 
     const filtered = islands.filter(island => {
@@ -56,9 +47,17 @@ export function IslandManagement() {
     setFilteredIslands(filtered);
   };
 
-  const handleAddIsland = (newIsland: Island) => {
-    setIslands(prevIslands => [...prevIslands, newIsland]);
-    setFilteredIslands(prevFiltered => [...prevFiltered, newIsland]);
+  const handleAddIsland = async (newIsland: Island) => {
+    try {
+      const newDocId = await addSingleDocument("test", newIsland);
+      const addedIsland = { ...newIsland, id: newDocId };
+
+      setIslands(prevIslands => [...prevIslands, addedIsland]);
+      setFilteredIslands(prevFiltered => [...prevFiltered, addedIsland]);
+    } catch (error) {
+      console.error("Error adding island:", error);
+      // Optionally handle error
+    }
   };
 
   if (loading) {
@@ -81,39 +80,3 @@ export function IslandManagement() {
   );
 }
 
-// import { useState } from "react"
-// import { SearchBar } from "@/components/default/SearchBar"
-// import { AddIslandButton } from "@/components/default/AddIslandBtn"
-// import { IslandTable } from "@/components/default/IslandTable"
-// import { Island } from "@/schema/island"
-//
-// export function IslandManagement() {
-//   const [islands, setIslands] = useState<Island[]>([])
-//   const [filteredIslands, setFilteredIslands] = useState<Island[]>([])
-//
-//   const handleSearch = (query: string) => {
-//     const filtered = islands.filter(island =>
-//       island.name.toLowerCase().includes(query.toLowerCase()) ||
-//       island.islandType.toLowerCase().includes(query.toLowerCase()) ||
-//       (island.atoll && island.atoll.toLowerCase().includes(query.toLowerCase()))
-//     )
-//     setFilteredIslands(filtered)
-//   }
-//
-//   const handleAddIsland = (newIsland: Island) => {
-//     setIslands(prevIslands => [...prevIslands, newIsland])
-//     setFilteredIslands(prevFiltered => [...prevFiltered, newIsland])
-//   }
-//
-//   return (
-//     <div className="container mx-auto py-10">
-//       <h1 className="text-2xl font-bold mb-6">Island</h1>
-//       <div className="flex justify-between items-center mb-6">
-//         <SearchBar onSearch={handleSearch} />
-//         <AddIslandButton onIslandAdded={handleAddIsland} />
-//       </div>
-//       <IslandTable islands={filteredIslands.length > 0 ? filteredIslands : islands} />
-//     </div>
-//   )
-// }
-//

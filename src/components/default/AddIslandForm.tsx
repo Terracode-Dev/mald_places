@@ -21,11 +21,11 @@ export function AddIslandForm({ onSubmit }: AddIslandFormProps) {
   const form = useForm<Island>({
     resolver: zodResolver(islandSchema),
     defaultValues: {
-      name: "",
-      latitude: "",
-      longitude: "",
-      islandType: "",
-      atoll: "",
+      Name: "",
+      Latitude: "",
+      Longitude: "",
+      IslandType: "",
+      Atoll: "",
     },
   })
 
@@ -35,7 +35,20 @@ export function AddIslandForm({ onSubmit }: AddIslandFormProps) {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="name"
+            name="No"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Island No</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Island Number" {...field} onChange={e => field.onChange(parseInt(e.target.value))} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="Name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
@@ -48,7 +61,7 @@ export function AddIslandForm({ onSubmit }: AddIslandFormProps) {
           />
           <FormField
             control={form.control}
-            name="latitude"
+            name="Latitude"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Latitude</FormLabel>
@@ -61,7 +74,7 @@ export function AddIslandForm({ onSubmit }: AddIslandFormProps) {
           />
           <FormField
             control={form.control}
-            name="longitude"
+            name="Longitude"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Longitude</FormLabel>
@@ -96,7 +109,7 @@ export function AddIslandForm({ onSubmit }: AddIslandFormProps) {
           {/* /> */}
           <FormField
             control={form.control}
-            name="islandType"
+            name="IslandType"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Island Type</FormLabel>
@@ -109,7 +122,7 @@ export function AddIslandForm({ onSubmit }: AddIslandFormProps) {
           />
           <FormField
             control={form.control}
-            name="atoll"
+            name="Atoll"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Atoll</FormLabel>
@@ -120,7 +133,13 @@ export function AddIslandForm({ onSubmit }: AddIslandFormProps) {
               </FormItem>
             )}
           />
-          <Button type="submit">Add Island</Button>
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Adding..." : "Add Island"}
+          </Button>
+          {/* <Button type="submit">Add Island</Button> */}
         </form>
       </Form>
     </>
