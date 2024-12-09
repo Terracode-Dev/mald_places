@@ -1,24 +1,15 @@
 import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import { getDocumentById } from "../firebase";
 import "./App.css";
-import ExcelUploader from "./utils/exceluploader";
+import Tester from "./tester";
 
 function App() {
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    async function getDocs() {
-      const ISLAND = await getDocumentById("islands", "AFKBNXQo4235DXwfeoLO");
-      console.log("Isalnds", ISLAND);
-    }
-    getDocs();
-  }, []);
-
   return (
     <>
-      <ExcelUploader />
+      <Tester />
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
