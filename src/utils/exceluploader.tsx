@@ -49,7 +49,8 @@ export default function ExcelUploader() {
             const Doc: Record<string, any> = {};
             const rowValues = Object.values(dt);
             for (let col = 0; col < rowValues.length; col++) {
-              Doc[columns[col] as any] = rowValues[col];
+              const key = (columns[col] as any).replace(/\s+/g, "");
+              Doc[key] = rowValues[col];
             }
             return Doc;
           }
