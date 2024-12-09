@@ -1,15 +1,15 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { AddIslandForm } from "./AddIslandForm"
-import { Island } from "@/schema/island"
-import { ExcelFileUploader } from "./ExcelUploader"
+} from "@/components/ui/dialog";
+import { AddIslandForm } from "./AddIslandForm";
+import { Island } from "@/schema/island";
+import { ExcelFileUploader } from "./ExcelUploader";
 
 // interface AddIslandButtonProps {
 //   onIslandAdded: (island: Island) => void
@@ -64,12 +64,12 @@ export function AddIslandButton({ onIslandAdded }: AddIslandButtonProps) {
       <DialogTrigger asChild>
         <Button>Add Island</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[570px] max-h-[90vh] overflow-y-auto" >
+      <DialogContent className="sm:max-w-[570px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Island</DialogTitle>
         </DialogHeader>
         <AddIslandForm onSubmit={handleSubmit} />
-        <ExcelFileUploader />
+
         {isAdding && (
           <div className="flex justify-center items-center">
             sending data ...

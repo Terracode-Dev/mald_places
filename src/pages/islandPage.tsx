@@ -60,17 +60,13 @@ export function IslandManagement() {
     }
   };
 
-  if (loading) {
-    return <div className="text-center py-10">Loading islands...</div>;
-  }
-
   if (error) {
     return <div className="text-center py-10 text-red-500">{error}</div>;
   }
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">Island</h1>
+      <h1 className="text-2xl font-bold mb-6">Island List</h1>
       <div className="flex justify-between items-center mb-6">
         <SearchBar onSearch={handleSearch} />
         <div className="flex gap-2">
@@ -78,9 +74,14 @@ export function IslandManagement() {
           <AddIslandButton onIslandAdded={handleAddIsland} />
         </div>
       </div>
-      <IslandTable
-        islands={filteredIslands.length > 0 ? filteredIslands : islands}
-      />
+
+      {loading ? (
+        <div className="text-center py-10">Loading islands...</div>
+      ) : (
+        <IslandTable
+          islands={filteredIslands.length > 0 ? filteredIslands : islands}
+        />
+      )}
     </div>
   );
 }
