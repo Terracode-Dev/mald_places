@@ -46,10 +46,10 @@ export default function ExcelUploader() {
       const records = data
         .map((dt: any, i: number) => {
           if (i !== 0) {
-            const Doc = {};
+            const Doc: Record<string, any> = {};
             const rowValues = Object.values(dt);
             for (let col = 0; col < rowValues.length; col++) {
-              Doc[columns[col]] = rowValues[col];
+              Doc[columns[col] as any] = rowValues[col];
             }
             return Doc;
           }

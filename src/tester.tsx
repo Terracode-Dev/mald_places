@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
-import { CheckAuth, getDocumentById } from "../firebase";
+import { CheckAuth } from "../firebase";
 import "./App.css";
 import ExcelUploader from "./utils/exceluploader";
 
