@@ -6,13 +6,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import * as z from "zod"
+import { CheckAuth } from "../../firebase"
+import { useNavigate } from "react-router-dom"
 
 const loginSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
+  username: z.string().min(2, {
+    message: "Please enter a valid user name.",
   }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters long.",
+  password: z.string().min(2, {
+    message: "Password must be at least 2 characters long.",
   }),
 })
 
@@ -21,6 +23,8 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message
+  const navigate = useNavigate();
 
   const {
     register,
@@ -30,14 +34,27 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = async (data: LoginFormValues) => {
-    setIsLoading(true)
-    // Here you would typically send the data to your server
-    console.log(data)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsLoading(false)
+
+  const goToIslandPage = () => {
+    navigate('/island');
   }
+  const onSubmit = async (data: LoginFormValues) => {
+    setIsLoading(true);
+    setErrorMessage(null); // Reset error message
+    try {
+      const isAuthenticated = await CheckAuth(data.username, data.password);
+      if (isAuthenticated) {
+        goToIslandPage();
+      } else {
+        setErrorMessage("User or password don't match."); // Set error message
+      }
+    } catch (error) {
+      setErrorMessage("An unexpected error occurred. Please try again.");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -46,18 +63,19 @@ export default function LoginPage() {
           <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
         </CardHeader>
         <CardContent>
+          {errorMessage && (
+            <div className="text-red-500 text-sm">{errorMessage}</div> // Display error message
+          )}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label >User Name</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  {...register("email")}
+                  id="username"
+                  {...register("username")}
                 />
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                {errors.username && (
+                  <p className="text-sm text-red-500">{errors.username.message}</p>
                 )}
               </div>
               <div className="space-y-2">

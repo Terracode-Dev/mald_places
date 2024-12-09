@@ -15,7 +15,7 @@ interface IslandTableProps {
 }
 
 export function IslandTable({ islands }: IslandTableProps) {
-  const [sortColumn, setSortColumn] = useState<keyof Island>("name");
+  const [sortColumn, setSortColumn] = useState<keyof Island>("No");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const sortedIslands = [...islands].sort((a, b) => {
@@ -38,44 +38,46 @@ export function IslandTable({ islands }: IslandTableProps) {
   return (
     <Table className="border rounded " >
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px]">No</TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
+        <TableRow >
+          <TableHead className="w-[50px]" onClick={() => handleSort("No")} >No</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort("Name")}>
             Name
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("latitude")}>
+          <TableHead className="cursor-pointer" onClick={() => handleSort("Latitude")}>
             Latitude
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("longitude")}>
+          <TableHead className="cursor-pointer" onClick={() => handleSort("Longitude")}>
             Longitude
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("islandType")}>
+          <TableHead className="cursor-pointer" onClick={() => handleSort("IslandType")}>
             Island Type
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => handleSort("atoll")}>
+          <TableHead className="cursor-pointer" onClick={() => handleSort("Atoll")}>
             Atoll
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {sortedIslands.map((island, index) => (
+        {sortedIslands.map((island,) => (
           <TableRow
-            key={island.name}
+            key={island.No}
             className="cursor-pointer hover:bg-muted/50"
-            onClick={() => console.log(island.name)}
+            onClick={() => console.log(island.Name)}
           >
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>{island.name}</TableCell>
-            <TableCell>{island.latitude || "N/A"}</TableCell>
-            <TableCell>{island.longitude || "N/A"}</TableCell>
-            <TableCell>{island.islandType || "N/A"}</TableCell>
-            <TableCell>{island.atoll || "N/A"}</TableCell>
+            <TableCell>{island.No}</TableCell>
+            <TableCell>{island.Name}</TableCell>
+            <TableCell>{island.Latitude || "N/A"}</TableCell>
+            <TableCell>{island.Longitude || "N/A"}</TableCell>
+            <TableCell>{island.IslandType || "N/A"}</TableCell>
+            <TableCell>{island.Atoll || "N/A"}</TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
   );
 }
+
+
 
 
 // export function IslandTable({ islands }: IslandTableProps) {

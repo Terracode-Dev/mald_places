@@ -66,6 +66,19 @@ export const getDocumentById = async <T = DocumentData>(
   }
 };
 
+export const getAllDocuments = async <T = DocumentData>(
+  collectionName: string
+): Promise<T[]> => {
+  try {
+    const colRef = collection(db, collectionName);
+    const colSnap = await getDocs(colRef);
+    return colSnap.docs.map(doc => doc.data() as T);
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+    throw error;
+  }
+};
+
 export const getDocumentsByCriteria = async <T = DocumentData>(
   collectionName: string,
   criteria: Record<string, unknown>,
