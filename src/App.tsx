@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import LoginPage from './pages/login'
 import { IslandManagement } from './pages/islandPage'
@@ -18,6 +19,7 @@ function App() {
   return (
     <RouterProvider router={router} />
   )
+
 }
 
-export default App
+export default App;
