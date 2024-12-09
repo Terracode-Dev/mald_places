@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SearchBar } from "@/components/default/SearchBar";
 import { AddIslandButton } from "@/components/default/AddIslandBtn";
+import ExcelImporter from "@/utils/exceluploader";
 import { IslandTable } from "@/components/default/IslandTable";
 import { Island } from "@/schema/island";
 import { getAllDocuments, addSingleDocument } from "../../firebase"; // Adjust the path based on your project structure
@@ -15,7 +16,7 @@ export function IslandManagement() {
     const fetchIslands = async () => {
       try {
         setLoading(true);
-        const fetchedIslands = await getAllDocuments<Island[]>("test"); // Replace "all" with your document ID or logic
+        const fetchedIslands = await getAllDocuments<Island[]>("islands"); // Replace "all" with your document ID or logic
         console.log(fetchedIslands);
         if (fetchedIslands) {
           setIslands(fetchedIslands.flat());
@@ -72,7 +73,10 @@ export function IslandManagement() {
       <h1 className="text-2xl font-bold mb-6">Island</h1>
       <div className="flex justify-between items-center mb-6">
         <SearchBar onSearch={handleSearch} />
-        <AddIslandButton onIslandAdded={handleAddIsland} />
+        <div className="flex gap-2">
+          <ExcelImporter />
+          <AddIslandButton onIslandAdded={handleAddIsland} />
+        </div>
       </div>
       <IslandTable
         islands={filteredIslands.length > 0 ? filteredIslands : islands}
